@@ -9,5 +9,7 @@ Bundler.require(*Rails.groups)
 module T17App
   class Application < Rails::Application
     config.time_zone = "Riga"
+    config.assets << Gemojione.images_path
+    config.assets.precompile << "emoji/*.png"
   end
 end

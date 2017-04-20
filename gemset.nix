@@ -183,6 +183,14 @@
     };
     version = "5.2.1";
   };
+  gemojione = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0svj3hsmwyr306vg75cd7p9i4bwnajrda60n2vhiav2cvhnkawik";
+      type = "gem";
+    };
+    version = "3.2.0";
+  };
   globalid = {
     source = {
       remotes = ["https://rubygems.org"];
@@ -230,6 +238,14 @@
       type = "gem";
     };
     version = "4.3.1";
+  };
+  json = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "01v6jjpvh3gnq6sgllpfqahlgxzj50ailwhj9b3cd20hi2dx0vxp";
+      type = "gem";
+    };
+    version = "2.1.0";
   };
   jwt = {
     source = {

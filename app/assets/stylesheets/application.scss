@@ -298,3 +298,31 @@ table {
 gray { color: gray; }
 gray a { opacity: 0.5; }
 
+
+.like-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.like-button {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  padding: 4px;
+  background-color: #efe;
+  transition: 0.1s ease all;
+  transform: scale(1.4);
+
+  &:hover {
+    transform: scale(1.6);
+  }
+}
+
+likes {
+  font-size: 80%;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  img { margin-right: 1em; }
+}

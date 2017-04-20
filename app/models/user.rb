@@ -18,4 +18,5 @@ class User < ApplicationRecord
   has_many :invitations
   belongs_to :invitation
   has_many :invited_users, class_name: "User", through: :invitations
+  has_many :likes
 end

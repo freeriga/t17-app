@@ -12,7 +12,7 @@
       <div class=spaced>
         <span><%= @post.user.first_name %></span>
         <date> <%= @post.created_at.in_time_zone.to_s(:long) %></date>
-        <% if @can_post %>
+        <% if @can_edit %>
           <gray> <%= link_to "Edit", edit_post_path(@post) %></gray>
         <% end %>
       </div>
@@ -24,6 +24,21 @@
     <p>
     </p>
   </article>
+
+<% if user_signed_in? || @post.likes.present? %>
+  <likes>
+    <% if user_signed_in? and not @post.likers.include?(current_user) %>
+      <%= link_to like_post_path(@post), { method: :post } do %>
+        <%= image_tag "emoji/svg/1F44F.svg", class: "like-button" %>
+      <% end %>
+    <% else %>
+      <%= image_tag "emoji/svg/1F44F.svg", class: "like-icon" %>
+    <% end %>
+    <% if @post.likes.present? %>
+      Applause from&nbsp;<b><%= @post.likes.map {|x| x.user.first_name}.to_sentence %></b>
+    <% end %>
+  </likes>
+<% end %>
 </section>
 
 <section>

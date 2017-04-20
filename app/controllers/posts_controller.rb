@@ -33,6 +33,13 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.friendly.find(params[:id])
+    @can_edit = user_signed_in? and current_user.admin?
+  end
+
+  def like
+    post = Post.friendly.find(params[:post_id])
+    post.likes.build(user: current_user).save!
+    redirect_to post
   end
 
   private

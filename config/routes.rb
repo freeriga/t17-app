@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       resources :comments, shallow: true
     end
   end
+
+  post 'like/:post_id', to: "posts#like", as: :like_post
   
   get 'administer', :to => 'administration#index', :as => :administer
   post 'administer', :to => 'administration#save'
