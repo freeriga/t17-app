@@ -31,6 +31,15 @@ class PostsController < ApplicationController
     end
   end
 
+  def update
+    @post = Post.friendly.find(params[:id])
+    if @post.update(post_params)
+      redirect_to @post
+    else
+      render 'edit'
+    end
+  end
+
   def show
     @post = Post.friendly.find(params[:id])
     @can_edit = user_signed_in? and current_user.admin?
