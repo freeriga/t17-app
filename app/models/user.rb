@@ -11,6 +11,12 @@ class User < ApplicationRecord
     end
   end
 
+  before_save do
+    if self.image
+      self.image.gsub! /^http:/, "https:"
+    end
+  end
+
   def first_name
     name.split[0]
   end

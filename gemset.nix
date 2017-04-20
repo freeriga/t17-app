@@ -159,6 +159,22 @@
     };
     version = "2.7.0";
   };
+  factory_girl = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0cc60v28r7w1gp34p4amzdnq7cyip6qhffvxywsj3ypilyf8jqla";
+      type = "gem";
+    };
+    version = "4.8.0";
+  };
+  factory_girl_rails = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0hw8qqp30vm4yf4a36r1r65wk78ihxmas7jg5fyl6fcf705z9fvv";
+      type = "gem";
+    };
+    version = "4.8.0";
+  };
   faraday = {
     source = {
       remotes = ["https://rubygems.org"];

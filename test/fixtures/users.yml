@@ -8,6 +8,7 @@ mikael:
   email: mikael@t17.lv
   name: Mikael Brockman
   admin: true
+  image: http://example.com/mikael.jpg
 
 ieva:
   email: ieva@t17.lv
