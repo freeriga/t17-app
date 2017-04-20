@@ -1,0 +1,36 @@
+<header>
+  <h1>A new <span class=sc>T17</span> project begins...</h1>
+</header>
+
+<% if @project.errors.any? %>
+<section class="errors">
+  <h2>
+    Hey, come on.
+  </h2>
+  <ul>
+    <% @project.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+</section>
+<% end %>
+
+<section>
+  <h2>“Start small and start immediately.” &nbsp;&nbsp;&nbsp; ― Mr. Tvaiks</h2>
+  <%= form_for @project do |f| %>
+  <p>
+    <%= f.label :name, "First, choose a beautiful name." %>
+    <%= f.text_field :name, placeholder: 'e.g., "Cat Photography Masterclass"' %>
+  </p>
+  <p>
+    <%= f.label :description, "Now, what is this all about?" %>
+    <%= f.text_area :description, placeholder: 'e.g. "We teach troubled youths to snap and develop photos of neighbourhood kitties."' %>
+  </p>
+  <p>
+    <%= f.submit "Wonderful—let's do it." %>
+  </p>
+  <% end %>
+  <p>
+    <%= link_to "Nevermind, go back.", :back %>
+  </p>
+</section>

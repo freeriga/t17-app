@@ -1,0 +1,300 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900&subset=latin-ext');
+html, input, textarea { font: 22px/1.4 "Source Sans Pro", sans-serif; }
+* { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+h1 { font-size: 130%; font-weight: 900; }
+h2 { font-weight: normal; }
+section h2 { font-size: 120%; color: #666; }
+body { color: #333; }
+h2 { margin-bottom: .5rem; }
+abbr, .sc { text-transform: uppercase; }
+abbr, .sc { font-size: 85%; }
+a { text-decoration: none; }
+a:not(:visited) { color: mediumblue; }
+p, table { margin-bottom: .5rem; }
+b { font-weight: 600; }
+td { padding-right: .5em; }
+th { text-align: left; }
+
+.date { color: #666; font-size: 80%; }
+.date { display: inline-block; width: 6em; }
+
+.secret a {
+  font-family: serif;
+  opacity: 0.3;
+}
+
+footer.fancy {
+  background-image: image-url("house.jpg");
+  background-size: cover;
+  background-position: bottom center;
+  min-height: 8rem;
+
+  .fade {
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  span {
+    background: yellow;
+    display: inline;
+    padding: .25rem .5rem;
+    transform: rotateZ(2deg);
+
+    a { font-weight: 600; }
+  }
+}
+
+footer:not(.fancy) {
+  background: purple;
+}
+
+header.fullscreen {
+  height: 100vh;
+  /* border-bottom: 1rem solid yellow; */
+  /* text-shadow: 0 0 4px black, 0 0 20px black; */
+  background-image: image-url("house.jpg");
+  color: black;
+  h1 {
+    background: white;
+    background: #4955c3;
+    background: yellow;
+    color: black;
+    padding: 0 .25em;
+  }
+  
+  h2 {
+    background: yellow;
+    color: black;
+    margin-bottom: 1rem;
+    padding: 0 .5em;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: .05em;
+  }
+}
+
+header.fullscreen > * { transform: rotateZ(-2deg); }
+
+body > header:not(.fullscreen) {
+  color: #4955c3;
+  text-shadow: none;
+  background-size: contain;
+  h1 { padding-top: 2rem; }
+}
+
+body > header {
+  text-align: center;
+  width: 100%;
+  background-size: cover;
+  background-position: center center;
+  padding: 1rem;
+  font-size: 250%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  h1 {
+    letter-spacing: -.05em;
+    margin-bottom: .5rem;
+    line-height: 1.2;
+  }
+  
+  h2 { font-size: 1.5rem; }
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    font-weight: 100;
+  }
+  
+  a { border-bottom: 1px solid currentcolor; }
+
+  p {
+    font-size: 1.5rem;
+    max-width: 45%;
+    opacity: 0.9;
+    font-weight: 400;
+  }
+
+  .resident-list {
+    font-size: 1rem;
+    .avatar {
+      width: 3rem;
+      height: 3rem;
+      opacity: 0.8;
+    }
+  }
+
+  tt {
+    font-size: 1.25rem;
+    margin-bottom: .5rem;
+  }
+}
+
+tt {
+  font-family: "Fantasque Sans Mono";
+}
+
+section { margin: 4rem auto; }
+section:first-of-type { margin-top: 2rem; }
+section { max-width: 30rem; }
+
+date { color: grey; }
+
+h4 { font-weight: normal; color: #444; }
+
+project {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+article, comment {
+  margin-bottom: 2rem;
+  .avatar {
+    height: 2.75rem;
+    width: 2.75rem;
+    margin-right: 1rem;
+    float: left;
+  }
+
+  main {
+    margin-top: .5rem;
+  }
+}
+
+comment {
+  display: block;
+  name { font-weight: 600; }
+  margin-bottom: 1rem;
+}
+
+.spaced > * {
+  margin-right: .5rem;
+}
+
+label { display: block; line-height: 2em; }
+input[type=text] { width: 100%; }
+textarea { width: 100%; min-height: 8em; padding: .5rem; }
+input[type=submit] { padding: .25rem .5rem; border-radius: .25rem; margin-top: 1rem; }
+
+
+.flash {
+  position: absolute;
+  width: 100%;
+  font-size: 80%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.flash > * {
+  padding: .25rem .5rem;
+  border-radius: 0 0 .5em .5em;
+  border-top: 0 !important;
+  line-height: 1.1;
+  margin: 0 1rem;
+}
+
+.flash .notice {
+  background-color: rgba(245, 245, 255, 0.8);
+  border: 1px solid rgba(0, 0, 100, 0.4);
+  color: #335;
+}
+
+.flash .current-resident {
+  /* background-color: rgba(255, 255, 200, 0.8); */
+  background-color: white;
+  border: 1px solid rgba(100, 100, 100, 0.5);
+  color: #111;
+  padding: 0 .5em 0 0;
+  display: flex;
+  align-items: center;
+
+  img {
+    border-radius: 0 0 0 .5em;
+    margin-right: .5em;
+  }
+
+  a { font-size: 80%; }
+}
+
+.flash .alert {
+  border-color: rgba(100, 0, 0, 0.5);
+  background-color: rgba(255, 200, 200, 0.8);
+  color: #533;
+}
+
+.resident-list {
+  display: flex;
+}
+
+.resident {
+  margin-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 80%;
+  .avatar {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.avatar {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center center;
+}
+
+.breadcrumbs {
+  font-size: 85%;
+  opacity: 0.7;
+  margin: .5rem auto;
+}
+
+img.freeriga {
+  border-radius: 50%;
+  width: 4rem;
+  opacity: 1;
+}
+
+ul {
+  list-style-type: none;
+  margin-left: 1rem;
+}
+
+table {
+  .avatar {
+    height: 1.5rem;
+    width: 1.5rem;
+    float: left;
+    margin-right: .5rem;
+  }
+}
+
+gray { color: gray; }
+gray a { opacity: 0.5; }
+

@@ -1,0 +1,57 @@
+<% breadcrumb @post %>
+<header>
+  <h1><%= @post.project.name %></h1>
+  <h2><%= @post.project.description %></h2>
+  <h3>a <abbr><%= link_to "T17", root_path %></abbr> project</h3>
+</header>
+
+<section>
+  <article>
+    <header>
+      <div class=avatar style="background-image: url('<%= @post.user.image %>?type=large')"></div>
+      <div class=spaced>
+        <span><%= @post.user.first_name %></span>
+        <date> <%= @post.created_at.in_time_zone.to_s(:long) %></date>
+        <% if @can_post %>
+          <gray> <%= link_to "Edit", edit_post_path(@post) %></gray>
+        <% end %>
+      </div>
+      <h3><%= @post.title %></h3>
+    </header>
+    <main>
+      <%= markdown(@post.body) %>
+    </main>
+    <p>
+    </p>
+  </article>
+</section>
+
+<section>
+  <h2>Comments</h2>
+  <% @post.comments.each do |comment| %>
+    <comment>
+      <header>
+        <div class=avatar style="background-image: url('<%= comment.user.image %>?type=large')"></div>
+        <div class=spaced>
+          <name><%= comment.user.first_name %></name>
+          <date> <%= comment.created_at.in_time_zone.to_s(:long) %></date>
+        </div>
+        <%= markdown(comment.body) %>
+      </header>
+    </comment>
+  <% end %>
+
+  <%= form_for :comment, url: post_comments_path(@post) do |f| %>
+    <p>
+      <%= f.label :body, "Leave a comment" %>
+      <%= f.text_area :body, placeholder: 'e.g., "Wow, nice!"' %>
+    </p>
+    <p>
+      <%= f.submit "Save comment" %>
+    </p>
+  <% end %>
+</section>
+
+<section>
+<%= breadcrumbs %>
+</section>

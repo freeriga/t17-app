@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+hello1:
+  title: Hello everyone
+  slug: hello-everyone
+  body: This is the first post.
+  project: x
+
+hello2:
+  title: Hello again
+  slug: hello-again
+  body: This is the second post.
+  project: x

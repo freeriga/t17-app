@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>T17</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <% if flash[:notice] || flash[:alert] || user_signed_in? %>
+      <div class="flash">
+      <% if flash[:notice] %>
+        <div class="notice"><%= notice %></div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="alert"><%= alert %></div>
+      <% end %>
+      <% if user_signed_in? %>
+        <div class="current-resident">
+          <img src="<%= current_user.image %>">
+          <div>
+            <b><%= current_user.name %></b>
+            <br>
+            <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
+            <% if current_user.admin? %>
+              ·
+              <%= link_to "Administer", administer_path %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      </div>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>

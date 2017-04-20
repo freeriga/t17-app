@@ -1,0 +1,58 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro);
+html { font: 16pt/1.4 "Source Sans Pro", sans-serif; }
+* { box-sizing: border-box; }
+body { padding-bottom: 8rem; }
+* { margin: 0; padding: 0; }
+h1 { font-size: 130%; }
+h2 { font-size: 110%; font-weight: normal; }
+h2 { color: #666; }
+p { color: #333; }
+h2 { margin-bottom: .5rem; }
+.sc { text-transform: uppercase; }
+.sc { font-size: 85%; }
+a { text-decoration: none; }
+a:not(:visited) { color: mediumblue; }
+p { margin-bottom: .5rem; }
+b { font-weight: bold; }
+
+article { width: 100%; background-size: cover; background-position: center center; }
+
+@media (min-width: 800px) {
+  html { font-size: 18pt; }
+  header { width: 18rem; }
+}
+
+.date { color: #666; font-size: 80%; }
+.date { display: inline-block; width: 6em; }
+
+header {
+  background-image: url(img/house.jpg);
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center center;
+  padding: 1rem;
+  color: white;
+  font-size: 230%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-shadow: 0 0 4px black, 0 0 20px black;
+  border-bottom: 1rem solid yellow;
+}
+
+header h2, header p { color: white; }
+
+section { margin: 2rem auto; }
+section { max-width: 50%; }
+
+date { font-family: "Fantasque Sans Mono"; margin-right: .5rem; }
+
+.avatar { width: 2.5rem; border-radius: 50%; }
+.avatar { float: left; margin: 0 .5rem .5rem 0; }
+article { clear: both; }
+
+h3 { margin-bottom: .25rem; }
+
+article { margin-bottom: 2rem; }

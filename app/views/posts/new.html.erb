@@ -1,0 +1,38 @@
+<header>
+  <h1><%= @project.name %></h1>
+  <h2><%= @project.description %></h2>
+  <h3>a <abbr><%= link_to "T17", root_path %></abbr> project</h3>
+</header>
+
+<% if @post.errors.any? %>
+<section class="errors">
+  <h2>
+    Hey, come on.
+  </h2>
+  <ul>
+    <% @post.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+</section>
+<% end %>
+
+<section>
+  <h2>New post</h2>
+  <%= form_for :post, url: project_posts_path(@project) do |f| %>
+  <p>
+    <%= f.label :title, "Subject" %>
+    <%= f.text_field :title, placeholder: 'e.g., "Mission accomplished!"' %>
+  </p>
+  <p>
+    <%= f.label :body, "Body" %>
+    <%= f.text_area :body %>
+  </p>
+  <p>
+    <%= f.submit "Yeah, that's it!" %>
+  </p>
+  <% end %>
+  <p>
+    <%= link_to "Nevermind, go back.", :back %>
+  </p>
+</section>

@@ -1,0 +1,115 @@
+<header>
+  <h1>T17 admin zone</h1>
+</header>
+
+<section>
+  <%= form_tag do %>
+    <%= label_tag :home_snippet, "House description:" %>
+    <%= text_area_tag :home_snippet, @snippet %>
+    <%= submit_tag "Save" %>
+  <% end %>
+</section>
+
+<section>
+  <h2>Projects</h2>
+  <p>
+    <%= link_to "Create a new project.", :new_project %>
+  </p>
+  <% if @projects.present? %>
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Creator</th>
+      </thead>
+      <tbody>
+        <% @projects.each do |project| %>
+          <tr>
+            <td><%= link_to project.name, edit_project_path(project) %></td>
+            <td><%= project.user.name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>There are no projects yet.</p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Admins</h2>
+  <table>
+    <thead>
+      <th>Name</th>
+      <th>Email</th>
+    </thead>
+    <tbody>
+      <% @admins.each do |admin| %>
+        <tr>
+          <td><%= admin.name %></td>
+          <td><%= admin.email %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Other users</h2>
+  <% if @users.present? %>
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Email</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td>
+              <%= link_to 'Make admin', make_admin_path(user.id), method: "POST", data: { confirm: "Make #{user.name} an admin?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>There are no other users.</p>
+  <% end %>
+</section>
+
+<% if false %>
+<section>
+  <p>
+    If someone wants to join without Facebook, they can use an invitation.
+  </p>
+  <p>
+    <%= link_to "Make new invitation.", invite_path %>
+  </p>
+  <% if @invitations.present? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Resident</th>
+          <th>Invitee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @invitations.each do |invitation| %>
+          <tr>
+            <td><tt><%= invitation.token %></tt></td>
+            <td><%= invitation.resident.name %></td>
+            <% if invitation.invitee %>
+              <td><%= invitation.invitee.name %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</section>
+<% end %>

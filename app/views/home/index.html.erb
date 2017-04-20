@@ -1,0 +1,55 @@
+<header class=fullscreen>
+  <h1>Turgeņeva iela 17</h1>
+  <h2>neighbourhood residence</h2>
+  <img class=freeriga src="<%= image_url "freeriga.jpg" %>">
+</header>
+
+<% if @snippet %>
+  <section>
+    <%= markdown(@snippet) %>
+  </section>
+<% end %>
+
+<section class="projects">
+  <% @projects.each do |project| %>
+    <project>
+      <h3><%= link_to project.name, project %></h3>
+      <h4><%= project.description %></h4>
+      <% if project.posts.present? %>
+        <table>
+          <% project.posts.each do |post| %>
+            <tr>
+              <td>
+                <date><%= post.created_at.in_time_zone.to_s(:short) %></date>
+              </td>
+              <td>
+                <%= link_to post.title, post %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </project>
+  <% end %>
+</section>
+
+<section class="residents">
+  <h2>Residents</h2>
+  <div class="resident-list">
+    <% @residents.each do |resident| %>
+      <div class="resident">
+        <div class="avatar" style="background-image: url('<%= resident.image %>?type=large')"></div>
+        <%= resident.first_name %>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<footer class=fancy>
+  <div class=fade>
+    <span>
+      As a resident, neighbour, or guest, you can
+      <%= link_to "sign in with Facebook", user_facebook_omniauth_authorize_path %>.
+    </span>
+  </div>
+</footer>

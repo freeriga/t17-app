@@ -3,16 +3,14 @@ with (import <nixpkgs> {});
 let
   rubyenv = bundlerEnv {
     name = "rb";
-    # Setup for ruby gems using bundix generated gemset.nix
     inherit ruby;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
-    # Bundler groups available in this environment
     groups = ["default" "development" "test"];
   };
 in stdenv.mkDerivation {
-  name = "your-rails-app";
+  name = "t17-app";
   version = "0.0.1";
 
   buildInputs = [

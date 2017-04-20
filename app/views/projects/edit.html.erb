@@ -1,0 +1,40 @@
+<header>
+  <h1><%= @project.name %> </h1>
+</header>
+
+<% if @project.errors.any? %>
+<section class="errors">
+  <h2>
+    Hey, come on.
+  </h2>
+  <ul>
+    <% @project.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+  </ul>
+</section>
+<% end %>
+
+<section>
+  <h2>"All change is not growth." &mdash; Mr. Vilnis</h2>
+  <%= form_for :project, url: project_path(@project), method: :patch do |f| %>
+  <p>
+    <%= f.label :name, "Project name" %>
+    <%= f.text_field :name, placeholder: 'e.g., "Cat Photography Masterclass"' %>
+  </p>
+  <p>
+    <%= f.label :description, "Brief and catchy tagline" %>
+    <%= f.text_field :description, placeholder: 'e.g. "Kiddies snapping kitties"' %>
+  </p>
+  <p>
+    <%= f.label :homepage, "Optional homepage address" %>
+    <%= f.text_field :homepage, placeholder: 'e.g., "https://www.catclass.club"' %> 
+  </p>
+  <p>
+    <%= f.submit "Perfect—change it." %>
+  </p>
+  <% end %>
+  <p>
+    <%= link_to "Nevermind, go back.", :back %>
+  </p>
+</section>

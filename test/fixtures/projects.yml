@@ -1,0 +1,7 @@
+x:
+  name: Project X
+  description: The X project
+
+y:
+  name: MyString
+  description: The Y project
