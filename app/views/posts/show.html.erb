@@ -42,7 +42,9 @@
 </section>
 
 <section>
-  <h2>Comments</h2>
+  <% if @post.comments.present? %>
+    <h2>Comments</h2>
+  <% end %>
   <% @post.comments.each do |comment| %>
     <comment>
       <header>
@@ -56,14 +58,16 @@
     </comment>
   <% end %>
 
-  <%= form_for :comment, url: post_comments_path(@post) do |f| %>
-    <p>
-      <%= f.label :body, "Leave a comment" %>
-      <%= f.text_area :body, placeholder: 'e.g., "Wow, nice!"' %>
-    </p>
-    <p>
-      <%= f.submit "Save comment" %>
-    </p>
+  <% if user_signed_in? %>
+    <%= form_for :comment, url: post_comments_path(@post) do |f| %>
+      <p>
+        <%= f.label :body, "Leave a comment" %>
+        <%= f.text_area :body, placeholder: 'e.g., "Wow, nice!"' %>
+      </p>
+      <p>
+        <%= f.submit "Save comment" %>
+      </p>
+    <% end %>
   <% end %>
 </section>
 
