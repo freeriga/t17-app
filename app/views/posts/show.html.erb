@@ -13,7 +13,7 @@
         <span><%= @post.user.first_name %></span>
         <date> <%= @post.created_at.in_time_zone.to_s(:long) %></date>
         <% if @can_edit %>
-          <gray> <%= link_to "Edit", edit_post_path(@post) %></gray>
+          <gray> <%= link_to "Edit", edit_project_post_path(@post.project, @post) %></gray>
         <% end %>
       </div>
       <h3><%= @post.title %></h3>
@@ -59,7 +59,7 @@
   <% end %>
 
   <% if user_signed_in? %>
-    <%= form_for :comment, url: post_comments_path(@post) do |f| %>
+    <%= form_for :comment, url: project_post_comments_path(@post.project, @post) do |f| %>
       <p>
         <%= f.label :body, "Leave a comment" %>
         <%= f.text_area :body, placeholder: 'e.g., "Wow, nice!"' %>

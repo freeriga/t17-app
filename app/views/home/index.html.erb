@@ -23,7 +23,7 @@
                 <date><%= post.created_at.in_time_zone.to_s(:short) %></date>
               </td>
               <td>
-                <%= link_to post.title, post %>
+                <%= link_to post.title, [project, post] %>
               </td>
             </tr>
           <% end %>

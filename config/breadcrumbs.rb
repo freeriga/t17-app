@@ -15,7 +15,7 @@ crumb :project do |project|
 end
 
 crumb :post do |post|
-  link post.title, post_path(post)
+  link post.title, project_post_path(post.project, post)
   parent :project, post.project
 end
 

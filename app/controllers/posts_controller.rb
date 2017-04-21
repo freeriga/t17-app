@@ -13,7 +13,7 @@ class PostsController < ApplicationController
   def post
     @post = Post.friendly.find(params[:id])
     if @post.update(post_params)
-      redirect_to @post
+      redirect_to [@post.project, @post]
     else
       render 'edit'
     end
@@ -34,7 +34,7 @@ class PostsController < ApplicationController
   def update
     @post = Post.friendly.find(params[:id])
     if @post.update(post_params)
-      redirect_to @post
+      redirect_to [@post.project, @post]
     else
       render 'edit'
     end
@@ -48,7 +48,7 @@ class PostsController < ApplicationController
   def like
     post = Post.friendly.find(params[:post_id])
     post.likes.build(user: current_user).save!
-    redirect_to post
+    redirect_to [post.project, post]
   end
 
   private

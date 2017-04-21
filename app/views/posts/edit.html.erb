@@ -19,7 +19,7 @@
 
 <section>
   <h2>Edit post</h2>
-  <%= form_for :post, url: post_path(@post), method: :patch do |f| %>
+  <%= form_for :post, url: project_post_path(@post.project, @post), method: :patch do |f| %>
   <p>
     <%= f.label :title, "Subject" %>
     <%= f.text_field :title, placeholder: 'e.g., "Mission accomplished!"' %>

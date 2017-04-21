@@ -5,9 +5,9 @@ class CommentsController < ApplicationController
     @comment.user = current_user
     if @comment.save
       flash[:notice] = "Thanks for the comment."
-      redirect_to @post
+      redirect_to [@post.project, @post]
     else
-      redirect_to @post
+      redirect_to [@post.project, @post]
     end
   end
 
