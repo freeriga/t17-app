@@ -125,7 +125,8 @@ body > header {
   h3 {
     font-size: 1.25rem;
     margin-bottom: 2rem;
-    font-weight: 100;
+    font-weight: 400;
+    opacity: 0.7;
   }
   
   a { border-bottom: 1px solid currentcolor; }
@@ -160,8 +161,8 @@ project {
 article, comment {
   margin-bottom: 2rem;
   .avatar {
-    height: 2.75rem;
-    width: 2.75rem;
+    height: 50px;
+    width: 50px;
     margin-right: 1rem;
     float: left;
   }
@@ -310,13 +311,16 @@ gray a { opacity: 0.5; }
 article main {
   margin-bottom: .75rem;
   margin-left: 1rem;
+  margin-top: .75rem;
 }
 
 likes {
-  font-size: 80%;
+  font-size: 90%;
+  opacity: 0.8;
   line-height: 1;
   display: flex;
   align-items: center;
+  padding-top: .75rem;
   margin-bottom: .25rem;
   img { margin-left: 0rem; margin-right: .5rem; }
 }
