@@ -70,7 +70,10 @@ footer:not(.fancy) {
 }
 
 header.fullscreen {
-  height: 100vh;
+  height: 110vh;
+  position: relative;
+  margin-bottom: 3rem;
+  background-position: bottom center;
   /* border-bottom: 1rem solid yellow; */
   /* text-shadow: 0 0 4px black, 0 0 20px black; */
   background-image: image-url("house.jpg");
@@ -94,7 +97,13 @@ header.fullscreen {
   }
 }
 
-header.fullscreen > * { transform: rotateZ(-2deg); }
+header.fullscreen > *:not(.whitegradient) { transform: rotateZ(-2deg); }
+
+.whitegradient {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 80%, white 97%);
+}
 
 body > header:not(.fullscreen) {
   color: #4955c3;
