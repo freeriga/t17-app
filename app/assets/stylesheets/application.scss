@@ -326,3 +326,8 @@ likes {
   align-items: center;
   img { margin-right: 1em; }
 }
+
+article img {
+  max-width: 100%;
+  margin: .5rem 0;
+}
