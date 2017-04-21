@@ -2,7 +2,7 @@
 <header>
   <h1><%= @post.project.name %></h1>
   <h2><%= @post.project.description %></h2>
-  <h3>a <abbr><%= link_to "T17", root_path %></abbr> project</h3>
+  <h3><%= link_to "T17 residence", root_path %></h3>
 </header>
 
 <%= render partial: "posts/post", locals: { post: @post, show_comment_indicator: false } %>
