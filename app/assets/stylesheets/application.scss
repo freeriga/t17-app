@@ -14,8 +14,8 @@
  *= require_self
  */
 
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900&subset=latin-ext');
-html, input, textarea { font: 22px/1.4 "Source Sans Pro", sans-serif; }
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400,600,700,900&subset=latin-ext');
+html, input, textarea { font: 16px/1.5 "Source Code Pro", sans-serif; }
 * { box-sizing: border-box; }
 * { margin: 0; padding: 0; }
 h1 { font-size: 130%; font-weight: 900; }
@@ -136,29 +136,16 @@ body > header {
     opacity: 0.9;
     font-weight: 400;
   }
-
-  .resident-list {
-    font-size: 1rem;
-    .avatar {
-      width: 3rem;
-      height: 3rem;
-      opacity: 0.8;
-    }
-  }
-
+  
   tt {
     font-size: 1.25rem;
     margin-bottom: .5rem;
   }
 }
 
-tt {
-  font-family: "Fantasque Sans Mono";
-}
-
 section { margin: 4rem auto; }
 section:first-of-type { margin-top: 2rem; }
-section { max-width: 30rem; }
+section { max-width: 39rem; }
 
 date { color: grey; }
 
@@ -167,6 +154,7 @@ h4 { font-weight: normal; color: #444; }
 project {
   display: block;
   margin-bottom: 1rem;
+  date { margin-right: .5rem; }
 }
 
 article, comment {
@@ -233,7 +221,7 @@ input[type=submit] { padding: .25rem .5rem; border-radius: .25rem; margin-top: 1
 
   img {
     border-radius: 0 0 0 .5em;
-    margin-right: .5em;
+    margin-right: 1rem;
   }
 
   a { font-size: 80%; }
@@ -258,6 +246,7 @@ input[type=submit] { padding: .25rem .5rem; border-radius: .25rem; margin-top: 1
   .avatar {
     width: 3rem;
     height: 3rem;
+    margin-bottom: .25rem;
   }
 }
 
@@ -297,7 +286,6 @@ table {
 
 gray { color: gray; }
 gray a { opacity: 0.5; }
-
 
 .like-icon {
   width: 1rem;
@@ -343,4 +331,9 @@ article main img {
   margin-left: 1rem;
   align-items: center;
   img { margin: 0 .25rem 0 .5rem; }
+}
+
+section.projects table {
+  line-height: 1.4;
+  margin-left: .5rem;
 }
