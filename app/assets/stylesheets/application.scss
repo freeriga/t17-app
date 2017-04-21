@@ -319,15 +319,28 @@ gray a { opacity: 0.5; }
   }
 }
 
+article main {
+  margin-bottom: .75rem;
+  margin-left: 1rem;
+}
+
 likes {
   font-size: 80%;
   line-height: 1;
   display: flex;
   align-items: center;
-  img { margin-right: 1em; }
+  margin-bottom: .25rem;
+  img { margin-left: 0rem; margin-right: .5rem; }
 }
 
-article img {
+article main img {
   max-width: 100%;
   margin: .5rem 0;
+}
+
+.post-bonuses {
+  display: inline-flex;
+  margin-left: 1rem;
+  align-items: center;
+  img { margin: 0 .25rem 0 .5rem; }
 }

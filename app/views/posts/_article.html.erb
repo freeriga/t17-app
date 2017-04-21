@@ -1,0 +1,38 @@
+<article>
+  <header>
+    <div class=avatar style="background-image: url('<%= post.user.image %>?type=large')"></div>
+    <div class=spaced>
+      <span><%= post.user.first_name %></span>
+      <date> <%= post.created_at.in_time_zone.to_s(:long) %></date>
+      <% if @can_edit %>
+        <gray> <%= link_to "Edit", edit_project_post_path(post.project, post) %></gray>
+      <% end %>
+    </div>
+    <h3><%= post.title %></h3>
+  </header>
+  <main>
+    <%= markdown(post.body) %>
+  </main>
+<% if user_signed_in? || post.likes.present? %>
+  <likes>
+    <% if user_signed_in? and not post.likers.include?(current_user) %>
+      <%= link_to like_post_path(post), { method: :post } do %>
+        <%= image_tag "emoji/svg/1F44F.svg", class: "like-button" %>
+      <% end %>
+    <% else %>
+      <%= image_tag "emoji/svg/1F44F.svg", class: "like-icon" %>
+    <% end %>
+    <% if post.likes.present? %>
+      Applause from&nbsp;<b><%= post.likes.map {|x| x.user.first_name}.to_sentence %></b>
+    <% end %>
+  </likes>
+<% end %>
+  <% if show_comment_indicator && post.comments.present? %>
+    <likes>
+      <%= image_tag "emoji/svg/1F4AC.svg", class: "like-icon" %>
+      <%= link_to project_post_path(post.project, post) do %>
+        <%= post.comments.count %> comments
+      <% end %>
+    </likes>
+  <% end %>
+</article>

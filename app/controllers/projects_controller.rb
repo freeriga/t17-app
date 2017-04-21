@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
     @project = Project.friendly.find(params[:id])
     @residents = User.where(admin: true)
     @can_post = user_signed_in? and @residents.include?(current_user)
+    @can_edit = @can_post
   end
   
   def new

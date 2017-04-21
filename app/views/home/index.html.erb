@@ -25,7 +25,21 @@
               <td>
                 <%= link_to post.title, [project, post] %>
               </td>
+              <td>
+            <% if post.comments.present? or post.likes.present? %>
+                <div class="post-bonuses">
+                  <% if post.likes.present? %>
+                    <%= image_tag "emoji/svg/1F44F.svg", class: "like-icon" %>
+                    <%= post.likes.count %>
+                  <% end %>
+                  <% if post.comments.present? %>
+                    <%= image_tag "emoji/svg/1F4AC.svg", class: "like-icon" %>
+                    <%= post.comments.count %>
+                  <% end %>
+                </div>
+              </td>
             </tr>
+            <% end %>
           <% end %>
         </table>
       <% end %>

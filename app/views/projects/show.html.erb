@@ -8,29 +8,8 @@
   <h3><abbr><%= link_to "T17", root_path %></abbr> residence project</h3>
 </header>
 
-<% if @project.posts.present? %>
-  <section>
-    <% @project.posts.each do |post| %>
-    <article>
-      <header>
-        <div class=avatar style="background-image: url('<%= post.user.image %>?type=large')"></div>
-        <div class=spaced>
-          <span><%= post.user.first_name %></span>
-          <date> <%= post.created_at.in_time_zone.to_s(:long) %></date>
-          <% if @can_post %>
-            <gray> <%= link_to "Edit", edit_project_post_path(post.project, post) %></gray>
-          <% end %>
-        </div>
-        <h3><%= post.title %></h3>
-      </header>
-      <main>
-        <%= markdown(post.body) %>
-      </main>
-      <p>
-      </p>
-    </article>
-    <% end %>
-  </section>
+<% @project.posts.each do |post| %>
+  <%= render partial: "posts/post", locals: { post: post, show_comment_indicator: true } %>
 <% end %>
 
 <% if @can_post %>
