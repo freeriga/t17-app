@@ -25,7 +25,7 @@
             <b><%= current_user.name %></b>
             <br>
             <%= link_to "Sign out", destroy_user_session_path, method: :delete %>
-            <% if current_user.admin? %> &nbsp; <%= link_to "Admin", administer_path %>
+            <% if current_user.admin? %> <%= link_to "Admin", administer_path %>
             <% end %>
           </div>
         </div>

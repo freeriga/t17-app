@@ -160,7 +160,7 @@ body > header {
   }
 }
 
-section { margin: 4rem auto; padding: 0 .5rem; }
+section { margin: 4rem auto; padding: 0 .75rem; }
 section:first-of-type { margin-top: 2rem; }
 section { max-width: 40rem; }
 
@@ -230,7 +230,7 @@ input[type=submit] { padding: .25rem .5rem; border-radius: .25rem; margin-top: 1
 }
 
 .flash .current-resident {
-  /* background-color: rgba(255, 255, 200, 0.8); */
+  img { height: 2.5rem; width: 2.5rem; }
   background-color: white;
   border: 1px solid rgba(100, 100, 100, 0.5);
   color: #111;
@@ -240,10 +240,8 @@ input[type=submit] { padding: .25rem .5rem; border-radius: .25rem; margin-top: 1
 
   img {
     border-radius: 0 0 0 .5em;
-    margin-right: 1rem;
+    margin-right: .75rem;
   }
-
-  a { font-size: 80%; }
 }
 
 .flash .alert {
@@ -330,6 +328,10 @@ article main {
   margin-bottom: .75rem;
   margin-left: 1rem;
   margin-top: .75rem;
+
+  @media #{$only-mobile} {
+    margin-left: 0;
+  }
 }
 
 likes {
