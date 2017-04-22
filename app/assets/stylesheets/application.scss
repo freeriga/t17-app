@@ -14,11 +14,19 @@
  *= require_self
  */
 
-@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400,600,700,900&subset=latin-ext');
+$not-mobile: "min-width: 600px";
+$only-mobile: "only screen and (max-width: 600px)";
 
-html, input, textarea { font: 16px/1.4 "AverageMonoRegular", sans-serif; }
+html, input, textarea {
+  font: 16px/1.4 "AverageMonoRegular", "courier new", courier, monospace;
+  @media #{$only-mobile} {
+    font-size: 13px;
+  }
+}
+
 * { box-sizing: border-box; }
 * { margin: 0; padding: 0; }
+
 h1 { font-size: 130%; font-weight: bold; }
 h2 { font-weight: normal; }
 section h2 { font-size: 120%; color: #666; }
@@ -32,9 +40,6 @@ p, table { margin-bottom: .5rem; }
 b { font-weight: bold; }
 td { padding-right: .5em; }
 th { text-align: left; }
-
-.date { color: #666; font-size: 80%; }
-.date { display: inline-block; width: 6em; }
 
 .secret a {
   font-family: serif;
@@ -71,6 +76,8 @@ footer:not(.fancy) {
 }
 
 header.fullscreen {
+  font-family: helvetica, sans-serif;
+
   height: 110vh;
   position: relative;
   margin-bottom: 3rem;
@@ -83,9 +90,12 @@ header.fullscreen {
     background: yellow;
     color: black;
     padding: 0 .25em;
+    letter-spacing: -0.05em;
+    margin-bottom: 0.5rem;
   }
   
   h2 {
+    letter-spacing: 0.065em;
     background: yellow;
     color: black;
     margin-bottom: 1rem;
@@ -150,11 +160,12 @@ body > header {
   }
 }
 
-section { margin: 4rem auto; }
+section { margin: 4rem auto; padding: 0 .5rem; }
 section:first-of-type { margin-top: 2rem; }
 section { max-width: 40rem; }
 
-date { color: grey; }
+date { color: grey; white-space: nowrap; }
+td { vertical-align: top; }
 
 h4 { font-weight: normal; color: #444; }
 
@@ -342,9 +353,21 @@ article main img {
   margin-left: 1rem;
   align-items: center;
   img { margin: 0 .25rem 0 .5rem; }
+  @media #{$only-mobile} {
+    img { margin-left: 0; }
+  }
 }
 
 section.projects table {
   line-height: 1.2;
-  margin-left: .5rem;
+  margin-top: .25rem;
 }
+
+@media (max-width: 600px) {
+  .not-on-mobile { display: none; }
+}
+
+td { border-bottom: 1px solid #ddd; }
+tr:last-child td { border-bottom: 0; }
+
+.ghost { visibility: none; opacity: 0; }

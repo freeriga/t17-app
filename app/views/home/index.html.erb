@@ -21,21 +21,25 @@
           <% project.posts.each do |post| %>
             <tr>
               <td>
-                <date><%= post.created_at.in_time_zone.to_s(:short) %></date>
+                <date><%= post.created_at.in_time_zone.to_s(:simple) %></date>
               </td>
-              <td>
+              <td style="width: 100%">
                 <%= link_to post.title, [project, post] %>
               </td>
               <td>
             <% if post.comments.present? or post.likes.present? %>
                 <div class="post-bonuses">
-                  <% if post.likes.present? %>
+                  <%= ghost_span post.likes.present? do %>
                     <%= image_tag "emoji/svg/1F44F.svg", class: "like-icon" %>
-                    <%= post.likes.count %>
                   <% end %>
-                  <% if post.comments.present? %>
+                  <%= ghost_span post.likes.present? do %>
+                    <span class="not-on-mobile"><%= post.likes.count %></span>
+                  <% end %>
+                  <%= ghost_span post.comments.present? do %>
                     <%= image_tag "emoji/svg/1F4AC.svg", class: "like-icon" %>
-                    <%= post.comments.count %>
+                  <% end %>
+                  <%= ghost_span post.comments.present? do %>
+                    <span class="not-on-mobile"><%= post.comments.count %></span>
                   <% end %>
                 </div>
               </td>
