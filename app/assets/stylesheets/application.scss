@@ -199,6 +199,7 @@ input[type=submit] { padding: .25rem .5rem; border-radius: .25rem; margin-top: 1
 
 .flash {
   position: absolute;
+  z-index: 2;
   width: 100%;
   font-size: 80%;
   display: flex;
