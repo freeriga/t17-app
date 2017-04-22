@@ -316,7 +316,7 @@ gray a { opacity: 0.5; }
   height: 1.25rem;
   border-radius: 50%;
   border: 1px solid #ddd;
-  padding: 4px;
+  padding: 2px;
   background-color: #efe;
   transition: 0.1s ease all;
   transform: scale(1.4);
@@ -344,7 +344,7 @@ likes {
   align-items: center;
   padding-top: .75rem;
   margin-bottom: .25rem;
-  img { margin-left: 0rem; margin-right: .5rem; }
+  img { margin-left: 0rem; margin-right: 1rem; }
 }
 
 article main img {
