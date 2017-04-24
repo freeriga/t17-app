@@ -36,7 +36,8 @@ abbr, .sc { text-transform: uppercase; }
 abbr, .sc { font-size: 85%; }
 a { text-decoration: none; }
 a:not(:visited) { color: mediumblue; }
-p, table { margin-bottom: .5rem; }
+table { margin-bottom: .5rem; }
+p { margin-bottom: 1.4rem; }
 b { font-weight: bold; }
 td { padding-right: .5em; }
 th { text-align: left; }
