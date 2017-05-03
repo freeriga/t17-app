@@ -17,8 +17,22 @@
 $not-mobile: "min-width: 600px";
 $only-mobile: "only screen and (max-width: 600px)";
 
+@font-face {
+  font-family: "AverageMono";
+  src: asset-data-url("AverageMono.subset.woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "AverageMono";
+  src: asset-data-url("AverageMonoBold.subset.woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
 html, input, textarea {
-  font: 16px/1.4 "AverageMonoRegular", "courier new", courier, monospace;
+  font: 16px/1.4 "AverageMono", "courier new", courier, monospace;
   @media #{$only-mobile} {
     font-size: 13px;
   }
@@ -79,10 +93,10 @@ footer:not(.fancy) {
 header.fullscreen {
   font-family: helvetica, sans-serif;
 
-  height: 110vh;
+  height: 100vh;
   position: relative;
   margin-bottom: 3rem;
-  background-position: bottom center;
+  background-position: center center;
   background-image: image-url("house.jpg");
   color: black;
   h1 {
@@ -106,13 +120,7 @@ header.fullscreen {
   }
 }
 
-header.fullscreen > *:not(.whitegradient) { transform: rotateZ(-2deg); }
-
-.whitegradient {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 80%, white 97%);
-}
+header.fullscreen > * { transform: rotateZ(-2deg); }
 
 body > header:not(.fullscreen) {
   color: #4955c3;
