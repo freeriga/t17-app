@@ -79,10 +79,10 @@ footer:not(.fancy) {
 header.fullscreen {
   font-family: helvetica, sans-serif;
 
-  height: 110vh;
+  height: 100vh;
   position: relative;
   margin-bottom: 3rem;
-  background-position: bottom center;
+  background-position: center center;
   background-image: image-url("house.jpg");
   color: black;
   h1 {
@@ -106,13 +106,7 @@ header.fullscreen {
   }
 }
 
-header.fullscreen > *:not(.whitegradient) { transform: rotateZ(-2deg); }
-
-.whitegradient {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 80%, white 97%);
-}
+header.fullscreen > * { transform: rotateZ(-2deg); }
 
 body > header:not(.fullscreen) {
   color: #4955c3;
