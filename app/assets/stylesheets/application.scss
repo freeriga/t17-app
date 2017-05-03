@@ -17,8 +17,22 @@
 $not-mobile: "min-width: 600px";
 $only-mobile: "only screen and (max-width: 600px)";
 
+@font-face {
+  font-family: "AverageMono";
+  src: asset-data-url("AverageMono.subset.woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "AverageMono";
+  src: asset-data-url("AverageMonoBold.subset.woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
 html, input, textarea {
-  font: 16px/1.4 "AverageMonoRegular", "courier new", courier, monospace;
+  font: 16px/1.4 "AverageMono", "courier new", courier, monospace;
   @media #{$only-mobile} {
     font-size: 13px;
   }
