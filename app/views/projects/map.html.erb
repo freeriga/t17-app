@@ -1,0 +1,26 @@
+<section class=index-column>
+  <h1><%= @project.name %></h1>
+  <ul class=stories>
+    <% i = 1 %>
+    <% @project.posts.where("gps is not null").each do |post| %>
+      <li
+          class=place
+          data-coords="<%= post.gps %>">
+        <h3>
+          <span class=number-container><span class=number><%= i %></span><% i += 1 %></span>
+          <span class=name-container>
+            <a href=# class=name><%= post.title %></a>
+          </span>
+        </h3>
+        <div class=summary>
+          <span></span>
+          <%= markdown(post.body) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</section>
+
+<section class=map-column>
+  <div class=map id=mapelement></div>
+</section>

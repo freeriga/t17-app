@@ -17,5 +17,8 @@ Rails.application.routes.draw do
     resources :posts, path: "post", except: [:index] do
       resources :comments, shallow: true
     end
+    member do
+      get "map"
+    end
   end
 end

@@ -33,7 +33,12 @@ class ProjectsController < ApplicationController
       render 'edit'
     end
   end
-  
+
+  def map
+    @project = Project.friendly.find(params[:id])
+    render layout: "map"
+  end
+
   private
     def project_params
       params.require(:project).permit(:name, :description, :homepage)

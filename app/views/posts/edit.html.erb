@@ -29,6 +29,10 @@
     <%= f.text_area :body %>
   </p>
   <p>
+    <%= f.hidden_field :gps %>
+    <div id=post-edit-map></div>
+  </p>
+  <p>
     <%= f.submit "Yeah, that's it!" %>
   </p>
   <% end %>
