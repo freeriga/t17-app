@@ -12,14 +12,17 @@
 
 ActiveRecord::Schema.define(version: 20170529193234) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "comments", force: :cascade do |t|
     t.integer  "post_id"
     t.integer  "user_id"
     t.text     "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["post_id"], name: "index_comments_on_post_id"
-    t.index ["user_id"], name: "index_comments_on_user_id"
+    t.index ["post_id"], name: "index_comments_on_post_id", using: :btree
+    t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
   end
 
   create_table "configs", force: :cascade do |t|
@@ -35,8 +38,8 @@ ActiveRecord::Schema.define(version: 20170529193234) do
     t.integer  "invitee_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["invitee_id"], name: "index_invitations_on_invitee_id"
-    t.index ["user_id"], name: "index_invitations_on_user_id"
+    t.index ["invitee_id"], name: "index_invitations_on_invitee_id", using: :btree
+    t.index ["user_id"], name: "index_invitations_on_user_id", using: :btree
   end
 
   create_table "likes", force: :cascade do |t|
@@ -44,8 +47,8 @@ ActiveRecord::Schema.define(version: 20170529193234) do
     t.integer  "post_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["post_id"], name: "index_likes_on_post_id"
-    t.index ["user_id"], name: "index_likes_on_user_id"
+    t.index ["post_id"], name: "index_likes_on_post_id", using: :btree
+    t.index ["user_id"], name: "index_likes_on_user_id", using: :btree
   end
 
   create_table "posts", force: :cascade do |t|
@@ -57,8 +60,8 @@ ActiveRecord::Schema.define(version: 20170529193234) do
     t.datetime "updated_at", null: false
     t.integer  "user_id"
     t.string   "gps"
-    t.index ["project_id"], name: "index_posts_on_project_id"
-    t.index ["user_id"], name: "index_posts_on_user_id"
+    t.index ["project_id"], name: "index_posts_on_project_id", using: :btree
+    t.index ["user_id"], name: "index_posts_on_user_id", using: :btree
   end
 
   create_table "projects", force: :cascade do |t|
@@ -69,8 +72,8 @@ ActiveRecord::Schema.define(version: 20170529193234) do
     t.string   "slug"
     t.integer  "user_id"
     t.string   "homepage"
-    t.index ["slug"], name: "index_projects_on_slug"
-    t.index ["user_id"], name: "index_projects_on_user_id"
+    t.index ["slug"], name: "index_projects_on_slug", using: :btree
+    t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -90,9 +93,9 @@ ActiveRecord::Schema.define(version: 20170529193234) do
     t.string   "uid"
     t.string   "image"
     t.string   "name"
-    t.         "admin"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.boolean  "admin"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
 end

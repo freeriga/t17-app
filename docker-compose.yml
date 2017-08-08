@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: postgres
+  blog:
+    build: ./blog
+    command: bundle exec rails s -p 80 -b 0.0.0.0
+    volumes:
+      - ./blog:/app
+    ports:
+      - 3000:80
+    depends_on:
+      - db
+    env_file: ./dev.env
+  maze:
+    build: ./maze
+    command: bundle exec rails s -p 80 -b 0.0.0.0
+    volumes:
+      - ./maze:/app
+    ports:
+      - 3001:80
+    depends_on:
+      - db
