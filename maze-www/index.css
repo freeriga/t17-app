@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:400,600,700|Source+Sans+Pro:400,400i,700');
+
+html, body, button {
+  font: 22px/32px "source code pro";
+}
+
+html, body, #app {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+body {
+  margin-left: 2rem;
+}
+
+h1 {
+  font-size: 90%;
+  text-transform: uppercase;
+}
+
+.spinner,
+.spinner:after {
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+}
+
+.spinner {
+  font-size: .5rem;
+  position: relative;
+  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-left: 1.1em solid black;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.8s infinite linear;
+  animation: load8 1.8s infinite linear;
+  margin: 2rem;
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+div.centered {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-table td:first-child {
+  text-align: right;
+}
+
+.upload-table td {
+  padding-right: 1rem;
+}

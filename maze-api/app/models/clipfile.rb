@@ -1,0 +1,2 @@
+class Clipfile < ApplicationRecord
+end
