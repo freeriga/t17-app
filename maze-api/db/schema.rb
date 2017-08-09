@@ -10,17 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170808151708) do
+ActiveRecord::Schema.define(version: 20170809071926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "clipfiles", force: :cascade do |t|
-    t.string "hash"
+    t.string "sha2"
     t.integer "size"
-    t.string "type"
+    t.string "kind"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "clip_id"
+    t.string "path"
+    t.index ["clip_id"], name: "index_clipfiles_on_clip_id"
   end
 
   create_table "clips", force: :cascade do |t|
@@ -37,4 +40,5 @@ ActiveRecord::Schema.define(version: 20170808151708) do
     t.index ["slug"], name: "index_mazes_on_slug"
   end
 
+  add_foreign_key "clipfiles", "clips"
 end

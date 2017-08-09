@@ -22,6 +22,16 @@ fetch(`${apiRoot}/mazes`).then(x => x.json()).then(x => {
  })
 })
 
+setInterval(
+  () =>
+    fetch(`${apiRoot}/clips`).then(x => x.json()).then(x => {
+      update({
+        clips: x,
+      })
+    }),
+  5000
+)
+
 let testUploads = [{sent: 0, "name":"bridge.mov", "size":2323293, "progress":0}, {sent: 0, "name": "catdork.mov","size":2984696,"progress":0},{sent: 0, "name":"daugava.mov","size":3663837,"progress":0}]
 
 let state = {
@@ -56,8 +66,10 @@ let App = ({
 
         <section>
           <h1>Clips</h1>
-          {clips.map(x => <Clip clip={x}/>)}
-          {uploads.length == 0
+          <div className="clips">
+            {clips.map(x => <Clip clip={x}/>)}
+          </div>
+          {uploads.filter(x => !x.done).length == 0
             ? (
                 <form>
                    <label>
@@ -86,7 +98,7 @@ let App = ({
                       <td>{x.size}</td>
                       <td>
                       {
-                        x.sent >= x.size
+                        x.done
                           ? "done"
                           : `${((x.sent / x.size) * 100).toFixed(2)}%`
                       }
@@ -115,12 +127,24 @@ let Maze = ({
 let Clip = ({
   clip: {
     name,
+    clipfiles,
   }
 }) => (
-  <div>
-    {name}
+  <div className="clip">
+    {
+      jpegs(clipfiles).length
+        ?
+          <img
+           style={{ width: "8rem" }}
+           src={`${apiRoot}/blobs/${jpegs(clipfiles)[0].sha2}`}
+          />
+        : `${name}`
+
+    }
   </div>
 )
+
+let jpegs = xs => xs.filter(x => x.kind == "JPEG")
 
 function uploadClips(e) {
   update({
@@ -142,10 +166,12 @@ function uploadClips(e) {
     xhr.upload.addEventListener(
       "load", e => {
         console.log("ok", e)
+        state.uploads[i].done = true
+        render()
       }, false
     )
 
-    xhr.open("POST", `${apiRoot}/clipfiles`)
+    xhr.open("POST", `${apiRoot}/clips`)
 
     let data = new FormData()
     data.append("file", x)

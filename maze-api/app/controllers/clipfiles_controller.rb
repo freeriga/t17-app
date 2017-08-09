@@ -1,7 +1,6 @@
 class ClipfilesController < ApplicationController
-  def create
-    clipfile = params.require(:file)
-    TranscodeJob.perform_later(clipfile.path)
-    render json: clipfile.original_filename, status: 200
+  def download
+    file = Clipfile.find_by sha2: params[:sha2]
+    send_file file.path, type: file.mime
   end
 end

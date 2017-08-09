@@ -80,3 +80,16 @@ div.centered {
 .upload-table td {
   padding-right: 1rem;
 }
+
+.clip {
+  display: flex;
+  flex-direction: column;
+  margin: 0 1rem 1rem 0;
+  align-items: center;
+  border: 1px solid #ccc;
+}
+
+.clips {
+  display: flex;
+  flex-wrap: wrap;
+}
