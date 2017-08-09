@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809071926) do
+ActiveRecord::Schema.define(version: 20170809103229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,5 +40,17 @@ ActiveRecord::Schema.define(version: 20170809071926) do
     t.index ["slug"], name: "index_mazes_on_slug"
   end
 
+  create_table "spots", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "clip_id"
+    t.bigint "maze_id"
+    t.index ["clip_id"], name: "index_spots_on_clip_id"
+    t.index ["maze_id"], name: "index_spots_on_maze_id"
+  end
+
   add_foreign_key "clipfiles", "clips"
+  add_foreign_key "spots", "clips"
+  add_foreign_key "spots", "mazes"
 end
