@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809103229) do
+ActiveRecord::Schema.define(version: 20170809151955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,13 @@ ActiveRecord::Schema.define(version: 20170809103229) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "doors", force: :cascade do |t|
+    t.bigint "src_id"
+    t.bigint "dst_id"
+    t.index ["dst_id"], name: "index_doors_on_dst_id"
+    t.index ["src_id"], name: "index_doors_on_src_id"
+  end
+
   create_table "mazes", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -51,6 +58,8 @@ ActiveRecord::Schema.define(version: 20170809103229) do
   end
 
   add_foreign_key "clipfiles", "clips"
+  add_foreign_key "doors", "spots", column: "dst_id"
+  add_foreign_key "doors", "spots", column: "src_id"
   add_foreign_key "spots", "clips"
   add_foreign_key "spots", "mazes"
 end

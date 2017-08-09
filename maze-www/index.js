@@ -7,6 +7,8 @@ const apiRoot =
 
 // Framework
 
+let get = (xs, id) => xs.filter(x => x.id == id)[0]
+
 let pull = x => fetch(`${apiRoot}${x}`).then(x => x.json())
 let push = (x, y) =>
   fetch(`${apiRoot}${x}`, {
@@ -22,6 +24,7 @@ let doze = x => new Promise(f => setTimeout(() => f(), x * 1000))
 let yell = x => console.info(x)
 let wait = x => x.promise
 let race = x => Promise.race(x)
+let pick = x => race(x.map(wait))
 let nest = f => {
   let resolve
   let promise = new Promise(f => resolve = f)
@@ -29,6 +32,8 @@ let nest = f => {
   g.promise = promise
   return g
 }
+
+let defer = x => setTimeout(x, 0)
 
 // XHR with progress stream
 
@@ -69,7 +74,7 @@ let APP = async function() {
   yell("App exited")
 }
 
-setTimeout(APP)
+defer(APP)
 
 let OVERVIEW = async function ({
   mazes, clips
@@ -182,7 +187,29 @@ let OVERVIEW = async function ({
         </div>
       )
 
-      await race([wait(MAKE), wait(CANCEL)])
+      await pick([MAKE, CANCEL])
+    }
+  )
+
+  let ADD_EDGE = nest(
+    async function ({
+      src, dst,
+    }) {
+      meow(
+        <div className="dialog">
+          <section>
+            <h1>
+              <center>
+                <b>{src.name}</b> → <b>{dst.name}</b>
+              </center>
+            </h1>
+            <form>
+              <input placeholder={"e.g., \"To the east is @.\""} />
+            </form>
+          </section>
+        </div>
+      )
+      await doze(5)
     }
   )
 
@@ -190,19 +217,59 @@ let OVERVIEW = async function ({
     name,
     slug,
     spots,
-  }) => (
-    <section>
-      <h1>{name}</h1>
-      {
-        spots.length
-          ? spots.map(Spot)
-          : <i>
-              This maze lacks spots.
-              Add one by clicking a clip.
-            </i>
-      }
-    </section>
-  )
+  }) => {
+    let nodes = new vis.DataSet(spots.map(x => ({
+      id: x.id,
+      label: x.name,
+      image: thumbnailUrl(x.clip),
+    })))
+    let edges = new vis.DataSet([])
+    let $graph
+
+    defer(
+      () => new vis.Network(
+        $graph,
+        { nodes, edges },
+        {
+          height: "500px",
+          physics: { enabled: true },
+          nodes: {
+            font: {
+              size: 16,
+              face: "source code pro",
+            },
+            shape: "circularImage",
+            mass: 2.25,
+          },
+          manipulation: {
+            enabled: true,
+            addNode: false,
+            initiallyActive: true,
+            addEdge: (data, callback) => {
+              ADD_EDGE({
+                src: get(spots, data.from),
+                dst: get(spots, data.to),
+              })
+            }
+          },
+        }
+      )
+    )
+
+    return (
+      <section>
+        <h1>{name}</h1>
+        {
+          spots.length
+            ? <div ref={x => $graph = x}/>
+            : <i>
+                This maze lacks spots.
+                Add one by clicking a clip.
+              </i>
+        }
+      </section>
+    )
+  }
 
   let Spot = ({
     name, clip
@@ -264,11 +331,11 @@ let OVERVIEW = async function ({
   )
 
   // Wait for any of the nested actions
-  await race([
-    wait(ADD_CLIP),
-    wait(UPLOAD_CLIPS),
-    wait(REFRESH_CLIPS),
-    wait(CLICK_CLIP),
+  await pick([
+    UPLOAD_CLIPS,
+    REFRESH_CLIPS,
+    CLICK_CLIP,
+    ADD_EDGE,
   ])
 
   // Show "Cool!" for a while
@@ -294,3 +361,6 @@ let jpegs = xs => xs.filter(x => x.kind == "JPEG")
 
 let videoSource = xs =>
   `${apiRoot}/blobs/${xs.filter(x => x.kind == "MP4 H264 Vorbis")[0].sha2}`
+
+let thumbnailUrl = x =>
+  `${apiRoot}/blobs/${jpegs(x.clipfiles)[0].sha2}`
