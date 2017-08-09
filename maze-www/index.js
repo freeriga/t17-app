@@ -21,13 +21,39 @@ let nest = f => {
   return g
 }
 
+// XHR with progress stream
+
+let upload = (file, path) => {
+  let stream = {}
+  let data = new FormData()
+  data.append("file", file)
+
+  let xhr = new XMLHttpRequest()
+  xhr.upload.addEventListener(
+    "progress",
+    e => stream.resolve(e.loaded / file.size),
+    false
+  )
+  xhr.upload.addEventListener(
+    "load",
+    () => stream.resolve(1),
+    false
+  )
+  xhr.open("POST", `${apiRoot}${path}`)
+  xhr.send(data)
+
+  return stream
+}
+
+let progress = stream => new Promise(resolve => stream.resolve = resolve)
+
 // Maze app
 
 let APP = async function() {
-  meow(Loading("mazes"))
+  meow(Loading("Loading mazes..."))
   let mazes = await pull("/mazes")
   await doze(0.5)
-  meow(Loading("clips"))
+  meow(Loading("Loading clips..."))
   let clips = await pull("/clips")
   await doze(0.5)
   await OVERVIEW({ mazes, clips })
@@ -58,6 +84,27 @@ let OVERVIEW = async function ({
     }) {
       meow(Splash("Meow!"))
       await doze(0.5)
+    }
+  )
+
+  let UPLOAD_CLIPS = nest(
+    async function (
+      files
+    ) {
+      for (let file of files) {
+        console.log(file)
+        let stream = upload(file, "/clips")
+        while (true) {
+          let ratio = await progress(stream)
+          if (ratio === 1) {
+            break
+          } else {
+            meow(Loading(`Uploading ${file.name}: ${(ratio * 100).toFixed(2)}...`))
+          }
+        }
+        meow(Splash("Done!"))
+        await doze(0.5)
+      }
     }
   )
 
@@ -106,6 +153,17 @@ let OVERVIEW = async function ({
         <div className="clips">
           {clips.map(Clip)}
         </div>
+        <label className="button">
+          <span>
+            Upload
+          </span>
+          <input
+            type="file"
+            multiple={true}
+            onChange={e => UPLOAD_CLIPS(e.target.files)}
+            style={{ display: "none" }}
+          />
+        </label>
       </section>
     </div>
   )
@@ -113,7 +171,8 @@ let OVERVIEW = async function ({
   // Wait for any of the nested actions
   await race([
     wait(ADD_CLIP),
-    wait(FOO)
+    wait(FOO),
+    wait(UPLOAD_CLIPS),
   ])
 
   // Show "Cool!" for a while
@@ -132,144 +191,7 @@ let Splash = x =>
 let Loading = x =>
   <div className="centered">
     <div className="spinner"></div>
-    Loading {x}...
+    {x}
   </div>
 
-let array = x => [].slice.call(x)
-
-// fetch(`${apiRoot}/mazes`).then(x => x.json()).then(x => {
-//   sleep(0.5).then(() => {
-//     update({
-//       mazes: x,
-//     })
-//     fetch(`${apiRoot}/clips`).then(x => x.json()).then(x => {
-//       update({
-//         loading: null,
-//         clips: x,
-//       })
-//     })
-//  })
-// })
-
-// setInterval(
-//   () =>
-//     fetch(`${apiRoot}/clips`).then(x => x.json()).then(x => {
-//       update({
-//         clips: x,
-//       })
-//     }),
-//   5000
-// )
-
-let testUploads = [{sent: 0, "name":"bridge.mov", "size":2323293, "progress":0}, {sent: 0, "name": "catdork.mov","size":2984696,"progress":0},{sent: 0, "name":"daugava.mov","size":3663837,"progress":0}]
-
-let state = {
-   loading: "mazes and clips",
-   mazes: null,
-   clips: null,
-   uploads: [],
-}
-
-let update = x => { state = Object.assign({}, state, x); render() }
-
-let App = ({
-  state: {
-    loading,
-    mazes,
-    clips,
-    uploads,
-  }
-}) =>
-  loading
-    ? (
-      <div className="centered">
-        <div className="spinner"></div>
-        Loading {loading}...
-      </div>
-    ) : (
-      <div>
-        {mazes.map(x => <Maze maze={x}/>)}
-
-        <section>
-          <h1>Clips</h1>
-          <div className="clips">
-            {clips.map(x => <Clip clip={x}/>)}
-          </div>
-          {uploads.filter(x => !x.done).length == 0
-            ? (
-                <form>
-                   <label>
-                     <span
-                       style={{
-                         cursor: "pointer",
-                         borderBottom: "1px solid currentcolor",
-                       }}
-                     >
-                       Upload clips
-                     </span>
-                     <input
-                       type="file"
-                       multiple={true}
-                       onChange={uploadClips}
-                       style={{ display: "none" }}
-                     />
-                   </label>
-                </form>
-            ) : (
-              <table className="upload-table">
-                <tbody>
-                  {uploads.map(x =>
-                    <tr>
-                      <td>{x.name}</td>
-                      <td>{x.size}</td>
-                      <td>
-                      {
-                        x.done
-                          ? "done"
-                          : `${((x.sent / x.size) * 100).toFixed(2)}%`
-                      }
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            )
-          }
-        </section>
-      </div>
-    )
-
 let jpegs = xs => xs.filter(x => x.kind == "JPEG")
-
-function uploadClips(e) {
-  update({
-    uploads: array(e.target.files).map(x => ({
-      name: x.name,
-      size: x.size,
-      progress: 0,
-    }))
-  })
-  array(e.target.files).forEach((x, i) => {
-    let xhr = new XMLHttpRequest()
-    xhr.upload.addEventListener(
-      "progress", e => {
-        console.log(e)
-        state.uploads[i].sent = e.loaded
-        render()
-      }, false
-    )
-    xhr.upload.addEventListener(
-      "load", e => {
-        console.log("ok", e)
-        state.uploads[i].done = true
-        render()
-      }, false
-    )
-
-    xhr.open("POST", `${apiRoot}/clips`)
-
-    let data = new FormData()
-    data.append("file", x)
-    xhr.send(data)
-  })
-}
