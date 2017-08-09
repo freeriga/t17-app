@@ -75,28 +75,6 @@ let OVERVIEW = async function ({
   mazes, clips
 }) {
 
-  // Define the nested action for clicking on a clip
-  let ADD_CLIP = nest(
-    async function ({
-      name,
-      clipfiles,
-    }) {
-      // This should actually be an interactive chooser thingy
-      meow(Splash("Adding clip..."))
-      await doze(0.5)
-    }
-  )
-
-  // Define a dummy nested action for testing
-  let FOO = nest(
-    async function ({
-    }) {
-      meow(Splash("Meow!"))
-      await doze(0.5)
-    }
-  )
-
-  // Define a nested action for uploading clips sequentially
   let UPLOAD_CLIPS = nest(
     async function (
       files
@@ -208,7 +186,6 @@ let OVERVIEW = async function ({
     }
   )
 
-  // Define the maze renderer
   let Maze = ({
     name,
     slug,
@@ -219,7 +196,7 @@ let OVERVIEW = async function ({
       {
         spots.length
           ? spots.map(Spot)
-          : <i onClick={() => FOO({})}>
+          : <i>
               This maze lacks spots.
               Add one by clicking a clip.
             </i>
@@ -235,7 +212,6 @@ let OVERVIEW = async function ({
     </div>
   )
 
-  // Define the clip renderer
   let Clip = clip => (
     <div className="clip">
       {
@@ -290,7 +266,6 @@ let OVERVIEW = async function ({
   // Wait for any of the nested actions
   await race([
     wait(ADD_CLIP),
-    wait(FOO),
     wait(UPLOAD_CLIPS),
     wait(REFRESH_CLIPS),
     wait(CLICK_CLIP),
