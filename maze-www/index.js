@@ -8,6 +8,15 @@ const apiRoot =
 // Framework
 
 let pull = x => fetch(`${apiRoot}${x}`).then(x => x.json())
+let push = (x, y) =>
+  fetch(`${apiRoot}${x}`, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(y),
+  }).then(x => x.json())
 let meow = x => ReactDOM.render(x, document.querySelector("#app"))
 let doze = x => new Promise(f => setTimeout(() => f(), x * 1000))
 let yell = x => console.info(x)
@@ -116,6 +125,89 @@ let OVERVIEW = async function ({
     }
   )
 
+  let CLICK_CLIP = nest(
+    async function ({
+      id, name, clipfiles
+    }) {
+
+      let MAKE = nest(
+        async function ({
+          name, maze
+        }) {
+          meow(Loading("Making new spot..."))
+          await doze(0.5)
+          await push(`/spots`, {
+            clip: id,
+            maze,
+            name
+          })
+          meow(Loading("Refreshing mazes..."))
+          mazes = await pull("/mazes")
+        }
+      )
+
+      let CANCEL = nest(
+        async function () {
+          meow(Splash("Cancelled."))
+          await doze(0.5)
+        }
+      )
+
+      let $select, $name
+
+      meow(
+        <div className="dialog">
+          <section>
+            <h1>New spot</h1>
+            <video
+              autoPlay
+              loop
+              src={videoSource(clipfiles)}
+            />
+            <form
+              onSubmit={e => {
+                e.preventDefault()
+                MAKE({
+                  name: $name.value,
+                  maze: $select.value,
+                })
+             }}
+            >
+              <select ref={x => $select = x}>
+                {
+                  mazes.map(
+                    x => <option value={x.id}>{x.name}</option>
+                  )
+                }
+              </select>
+              <input
+                ref={x => $name = x}
+                autoFocus
+                placeholder="Spot name"
+              />
+              <span
+                className="button"
+                onClick={
+                  () => MAKE({
+                    name: $name.value,
+                    maze: $select.value,
+                  })
+                }
+              >
+                Make spot
+              </span>
+              <span className="button" onClick={CANCEL}>
+                Cancel
+              </span>
+            </form>
+          </section>
+        </div>
+      )
+
+      await race([wait(MAKE), wait(CANCEL)])
+    }
+  )
+
   // Define the maze renderer
   let Maze = ({
     name,
@@ -126,13 +218,21 @@ let OVERVIEW = async function ({
       <h1>{name}</h1>
       {
         spots.length
-          ? spots.map(() => <div>Spot</div>)
+          ? spots.map(Spot)
           : <i onClick={() => FOO({})}>
               This maze lacks spots.
               Add one by clicking a clip.
             </i>
       }
     </section>
+  )
+
+  let Spot = ({
+    name, clip
+  }) => (
+    <div>
+      <b>{name}</b>
+    </div>
   )
 
   // Define the clip renderer
@@ -144,13 +244,15 @@ let OVERVIEW = async function ({
             <img
              style={{ width: "8rem" }}
              src={`${apiRoot}/blobs/${jpegs(clip.clipfiles)[0].sha2}`}
-             onClick={() => ADD_CLIP(clip)}
+             onClick={() => CLICK_CLIP(clip)}
             />
           : `${name}`
 
       }
     </div>
   )
+
+  let $files
 
   // Render the overview
   meow(
@@ -161,20 +263,26 @@ let OVERVIEW = async function ({
         <div className="clips">
           {clips.map(Clip)}
         </div>
-        <label className="button">
-          <span>
-            Upload
+        <form>
+          <label className="button">
+            <span>
+              Upload
+            </span>
+            <input
+              ref={x => $files = x}
+              type="file"
+              multiple={true}
+              onChange={() => UPLOAD_CLIPS($files.files)}
+              style={{ display: "none" }}
+            />
+          </label>
+          <span
+            className="button"
+            onClick={ () => REFRESH_CLIPS() }
+          >
+            Refresh
           </span>
-          <input
-            type="file"
-            multiple={true}
-            onChange={e => UPLOAD_CLIPS(e.target.files)}
-            style={{ display: "none" }}
-          />
-        </label>
-        <span className="button" onClick={ () => REFRESH_CLIPS() }>
-          Refresh
-        </span>
+        </form>
       </section>
     </div>
   )
@@ -185,6 +293,7 @@ let OVERVIEW = async function ({
     wait(FOO),
     wait(UPLOAD_CLIPS),
     wait(REFRESH_CLIPS),
+    wait(CLICK_CLIP),
   ])
 
   // Show "Cool!" for a while
@@ -207,3 +316,6 @@ let Loading = x =>
   </div>
 
 let jpegs = xs => xs.filter(x => x.kind == "JPEG")
+
+let videoSource = xs =>
+  `${apiRoot}/blobs/${xs.filter(x => x.kind == "MP4 H264 Vorbis")[0].sha2}`

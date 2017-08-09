@@ -1,6 +1,17 @@
 class MazesController < ApplicationController
   def index
     mazes = Maze.all
-    render json: mazes, include: [:spots], status: 200
+    render \
+      json: mazes,
+      include: {
+        spots: {
+          include: {
+            clip: {
+              include: :clipfiles
+            }
+          }
+        }
+      },
+      status: 200
   end
 end
