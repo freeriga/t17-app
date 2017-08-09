@@ -87,12 +87,12 @@ let OVERVIEW = async function ({
     }
   )
 
+  // Define a nested action for uploading clips sequentially
   let UPLOAD_CLIPS = nest(
     async function (
       files
     ) {
       for (let file of files) {
-        console.log(file)
         let stream = upload(file, "/clips")
         while (true) {
           let ratio = await progress(stream)
@@ -105,6 +105,14 @@ let OVERVIEW = async function ({
         meow(Splash("Done!"))
         await doze(0.5)
       }
+    }
+  )
+
+  let REFRESH_CLIPS = nest(
+    async function () {
+      meow(Loading("Refreshing clips..."))
+      clips = await pull("/clips")
+      await doze(0.5)
     }
   )
 
@@ -164,6 +172,9 @@ let OVERVIEW = async function ({
             style={{ display: "none" }}
           />
         </label>
+        <span className="button" onClick={ () => REFRESH_CLIPS() }>
+          Refresh
+        </span>
       </section>
     </div>
   )
@@ -173,6 +184,7 @@ let OVERVIEW = async function ({
     wait(ADD_CLIP),
     wait(FOO),
     wait(UPLOAD_CLIPS),
+    wait(REFRESH_CLIPS),
   ])
 
   // Show "Cool!" for a while

@@ -113,4 +113,5 @@ section {
   padding: .25rem .5rem;
   background: rgba(0, 0, 0, 0.02);
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+  margin-right: 1rem;
 }
