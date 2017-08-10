@@ -147,3 +147,31 @@ form > * {
 form > *:last-child {
   margin-bottom: 0;
 }
+
+input[type=radio][name=clip] {
+  display: none;
+}
+
+label:not(.active) .clip {
+  border: 2px solid transparent;
+  opacity: 0.7;
+}
+
+label.active .clip {
+  border: 2px solid yellow;
+}
+
+.spot-menu {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: ivory;
+  border: 2px solid yellow;
+  border-radius: .25rem;
+  width: 16rem;
+  padding: .5rem;
+}
+
+.spot-menu center {
+  font-weight: bold;
+  text-transform: uppercase;
+}

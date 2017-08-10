@@ -20,7 +20,7 @@ let push = (x, y) =>
     body: JSON.stringify(y),
   }).then(x => x.json())
 let meow = x => ReactDOM.render(x, document.querySelector("#app"))
-let doze = x => new Promise(f => setTimeout(() => f(), x * 1000))
+let doze = x => new Promise(f => setTimeout(() => f(), x * 100))
 let yell = x => console.info(x)
 let wait = x => x.promise
 let race = x => Promise.race(x)
@@ -69,15 +69,17 @@ let APP = async function() {
   await doze(0.5)
   meow(Loading("Loading clips..."))
   let clips = await pull("/clips")
+  meow(Loading("Loading doors..."))
+  let doors = await pull("/doors")
   await doze(0.5)
-  await OVERVIEW({ mazes, clips })
+  await OVERVIEW({ mazes, clips, doors })
   yell("App exited")
 }
 
 defer(APP)
 
 let OVERVIEW = async function ({
-  mazes, clips
+  mazes, clips, doors,
 }) {
 
   let UPLOAD_CLIPS = nest(
@@ -108,22 +110,29 @@ let OVERVIEW = async function ({
     }
   )
 
-  let CLICK_CLIP = nest(
+  let ADD_NODE = nest(
     async function ({
-      id, name, clipfiles
+      node, callback, clip = clips[0], name = "",
     }) {
+
+      let loop = Symbol("loop")
+
+      let SELECT_CLIP = nest(
+        async function (
+          id
+        ) {
+          clip = get(clips, id)
+          return loop
+        }
+      )
 
       let MAKE = nest(
         async function ({
-          name, maze
+          maze, clip
         }) {
           meow(Loading("Making new spot..."))
           await doze(0.5)
-          await push(`/spots`, {
-            clip: id,
-            maze,
-            name
-          })
+          await push(`/spots`, { maze, clip, name })
           meow(Loading("Refreshing mazes..."))
           mazes = await pull("/mazes")
         }
@@ -133,47 +142,90 @@ let OVERVIEW = async function ({
         async function () {
           meow(Splash("Cancelled."))
           await doze(0.5)
+          callback(null)
         }
       )
 
-      let $select, $name
+      let SET_NAME = nest(
+        async function (x) {
+          console.log("SET_NAME", x)
+          name = x
+          return loop
+        }
+      )
+
+      let Clip = clip => (
+        <div className="clip">
+          {
+            jpegs(clip.clipfiles).length
+              ?
+                <img
+                 style={{ width: "8rem" }}
+                 src={`${apiRoot}/blobs/${jpegs(clip.clipfiles)[0].sha2}`}
+                />
+              : `${name}`
+
+          }
+        </div>
+      )
+
+      let $maze
 
       meow(
         <div className="dialog">
           <section>
             <h1>New spot</h1>
-            <video
-              autoPlay
-              loop
-              src={videoSource(clipfiles)}
-            />
             <form
               onSubmit={e => {
                 e.preventDefault()
                 MAKE({
-                  name: $name.value,
-                  maze: $select.value,
+                  maze: $maze.value,
+                  clip: clip.id,
                 })
              }}
             >
-              <select ref={x => $select = x}>
+              <select ref={x => $maze = x}>
                 {
                   mazes.map(
                     x => <option value={x.id}>{x.name}</option>
                   )
                 }
               </select>
+              <div className="clips">
+                {
+                  clips.map(x =>
+                    <label className={x.id === clip.id ? "active" : ""}>
+                      <input
+                        type="radio"
+                        name="clip"
+                        value={x.id}
+                        checked={x.id === clip.id}
+                        onChange={e => SELECT_CLIP(e.target.value)} />
+                      {Clip(x)}
+                    </label>
+                  )
+                }
+              </div>
               <input
-                ref={x => $name = x}
                 autoFocus
                 placeholder="Spot name"
+                value={name}
+                onChange={x => SET_NAME(x.target.value)}
               />
+              <div style={{ position: "relative" }}>
+                <video
+                  autoPlay
+                  loop
+                  src={videoSource(clip.clipfiles)}
+                />
+                { Menu({ name }) }
+              </div>
               <span
                 className="button"
                 onClick={
                   () => MAKE({
-                    name: $name.value,
-                    maze: $select.value,
+                    maze: $maze.value,
+                    clip: clip.id,
                   })
                 }
               >
@@ -187,7 +239,11 @@ let OVERVIEW = async function ({
         </div>
       )
 
-      await pick([MAKE, CANCEL])
+      let x = await pick([MAKE, CANCEL, SELECT_CLIP, SET_NAME])
+      console.log("picked", x)
+      if (x === loop) {
+        await ADD_NODE({ node, callback, clip, name })
+      }
     }
   )
 
@@ -195,22 +251,34 @@ let OVERVIEW = async function ({
     async function ({
       src, dst,
     }) {
-      meow(
-        <div className="dialog">
-          <section>
-            <h1>
-              <center>
-                <b>{src.name}</b> → <b>{dst.name}</b>
-              </center>
-            </h1>
-            <form>
-              <input placeholder={"e.g., \"To the east is @.\""} />
-            </form>
-          </section>
-        </div>
-      )
-      await doze(5)
+      meow(Loading("Saving edge..."))
+      await push("/doors", { src: src.id, dst: dst.id })
+      meow(Loading("Refreshing doors..."))
+      doors = await pull("/doors")
+
+      // meow(
+      //   <div className="dialog">
+      //     <section>
+      //       <h1>
+      //         <center>
+      //           <b>{src.name}</b> → <b>{dst.name}</b>
+      //         </center>
+      //       </h1>
+      //       <form>
+      //         <input placeholder={"e.g., \"To the east is @.\""} />
+      //       </form>
+      //     </section>
+      //   </div>
+      // )
     }
+  )
+
+  let Menu = ({
+    name
+  }) => (
+    <div className="spot-menu" style={{ bottom: "10%", right: "10%" }}>
+      <center>{name}</center>
+    </div>
   )
 
   let Maze = ({
@@ -220,26 +288,48 @@ let OVERVIEW = async function ({
   }) => {
     let nodes = new vis.DataSet(spots.map(x => ({
       id: x.id,
-      label: x.name,
+      label: `*${x.name}*`,
       image: thumbnailUrl(x.clip),
     })))
-    let edges = new vis.DataSet([])
+    console.log(doors)
+    let edges = new vis.DataSet(doors.map(
+      ({ src_id, dst_id }) => ({ from: src_id, to: dst_id }))
+    )
     let $graph
 
+    // TODO: use ref for init/deinit
     defer(
       () => new vis.Network(
         $graph,
         { nodes, edges },
         {
-          height: "500px",
+          locale: "maze",
+          locales: {
+            maze: {
+              edit: "Edit",
+              del: "Delete",
+              addEdge: "Add door",
+              addNode: "Add spot",
+              edgeDescription: "Click and drag...",
+              addDescription: "Add your spot...",
+              back: "Back",
+            }
+          },
+          height: "700px",
           physics: { enabled: true },
+          layout: { randomSeed: 0 },
           nodes: {
             font: {
               size: 16,
               face: "source code pro",
+              multi: "md",
             },
             shape: "circularImage",
-            mass: 2.25,
+            mass: 2.6,
+            size: 60,
+          },
+          edges: {
+            arrows: { to: { enabled: true } }
           },
           manipulation: {
             enabled: true,
@@ -250,7 +340,10 @@ let OVERVIEW = async function ({
                 src: get(spots, data.from),
                 dst: get(spots, data.to),
               })
-            }
+            },
+            addNode: (node, callback) => {
+              ADD_NODE({ node, callback })
+            },
           },
         }
       )
@@ -260,12 +353,7 @@ let OVERVIEW = async function ({
       <section>
         <h1>{name}</h1>
         {
-          spots.length
-            ? <div ref={x => $graph = x}/>
-            : <i>
-                This maze lacks spots.
-                Add one by clicking a clip.
-              </i>
+          <div ref={x => $graph = x}/>
         }
       </section>
     )
@@ -287,7 +375,6 @@ let OVERVIEW = async function ({
             <img
              style={{ width: "8rem" }}
              src={`${apiRoot}/blobs/${jpegs(clip.clipfiles)[0].sha2}`}
-             onClick={() => CLICK_CLIP(clip)}
             />
           : `${name}`
 
@@ -327,6 +414,15 @@ let OVERVIEW = async function ({
           </span>
         </form>
       </section>
+      <section style={{ position: "relative" }}>
+        <h1>Intro</h1>
+        <div ref={x => blender(x)}/>
+        <span style={{
+          position: "absolute", top: "50%", left: "20%", fontSize: 50, fontWeight: "bold", textShadow: "0 0 50px #ffffff"
+        }}>
+          LASTADIJA
+        </span>
+      </section>
     </div>
   )
 
@@ -334,8 +430,8 @@ let OVERVIEW = async function ({
   await pick([
     UPLOAD_CLIPS,
     REFRESH_CLIPS,
-    CLICK_CLIP,
     ADD_EDGE,
+    ADD_NODE,
   ])
 
   // Show "Cool!" for a while
@@ -343,7 +439,7 @@ let OVERVIEW = async function ({
   await doze(0.5)
 
   // Restart the overview
-  await OVERVIEW({ mazes, clips })
+  await OVERVIEW({ mazes, clips, doors })
 }
 
 let Splash = x =>
@@ -364,3 +460,82 @@ let videoSource = xs =>
 
 let thumbnailUrl = x =>
   `${apiRoot}/blobs/${jpegs(x.clipfiles)[0].sha2}`
+
+// Blender stuff
+
+const T = THREE
+
+let blender = root => {
+  if (root == null)
+    return
+
+  let w = window.innerWidth / 2
+  let h = w * (9 / 16)
+
+  var scene = new THREE.Scene();
+  // var camera = new THREE.PerspectiveCamera( 75, w / h, 0.1, 1000 );
+
+  var renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true,
+  });
+  renderer.setSize( w, h );
+  root.appendChild( renderer.domElement );
+
+  // var geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
+  // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  // var cube = new THREE.Mesh( geometry, material );
+  // scene.add( cube );
+
+  var light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+  scene.add( light )
+
+// scene.background = new T.Color(0xffffff)
+
+//  camera.position.z = 5;
+
+  let loader = new T.ObjectLoader()
+  let geometryLoader = new T.JSONLoader()
+  loader.load("last2.json", g => {
+    scene.add(g)
+    let clock = new T.Clock()
+    let mixer = new T.AnimationMixer(scene)
+
+    mixer.clipAction(g.animations[0])
+      .setDuration(10)
+      .startAt(0)
+      .play()
+
+    function loop () {
+      mixer.update(clock.getDelta())
+      renderer.render(scene, g.children[0])
+      requestAnimationFrame(loop)
+    }
+
+    scene.fog = new T.FogExp2(0xffffff, 0.09)
+
+    // let textureLoader = new T.TextureLoader()
+    // let tf0 = textureLoader.load("lensflare0.png")
+    // let tf1 = textureLoader.load("lensflare2.png")
+    // let tf2 = textureLoader.load("lensflare3.png")
+    // let pl = new T.PointLight(0xffffff, 1.5, 2000)
+    // pl.position.set(0, 0, 20)
+    // let lf = new T.LensFlare(tf0, 700, 0.0, T.AdditiveBlending, new T.Color(0xffffff))
+    // lf.add(tf1, 512, 0.0, T.AdditiveBlending)
+    // lf.add(tf1, 512, 0.0, T.AdditiveBlending)
+    // lf.add(tf1, 512, 0.0, T.AdditiveBlending)
+    // lf.add(tf2, 60, 0.6, T.AdditiveBlending)
+    // lf.add(tf2, 70, 0.7, T.AdditiveBlending)
+    // lf.add(tf2, 120, 0.9, T.AdditiveBlending)
+    // lf.add(tf2, 70, 1.0, T.AdditiveBlending)
+    // lf.position.copy(pl.position)
+    // //lf.customUpdateCallback = lfUpdateCallback
+    // scene.add(lf)
+
+    geometryLoader.load("buildings.json", (buildings, materials) => {
+      let mesh = new T.Mesh(buildings, materials)
+      scene.add(mesh)
+      loop()
+    })
+  })
+}

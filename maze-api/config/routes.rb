@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :clipfiles
   resources :clips
   resources :mazes
+  resources :doors
 
   get "/blobs/:sha2", to: "clipfiles#download"
 end
