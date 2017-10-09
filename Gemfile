@@ -41,3 +41,5 @@ gem 'omniauth-facebook'
 gem 'redcarpet'
 gem 'gretel'
 gem 'gemojione'
+
+gem 'yaml_db'

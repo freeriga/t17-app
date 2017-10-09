@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   post 'administer', :to => 'administration#save'
   get 'invite', :to => 'administration#invite', :as => :invite
   post 'make-admin/:user_id', :to => 'administration#make_admin', :as => :make_admin
+
+  get 'apply', to: redirect("https://goo.gl/forms/s2Kgtq6KI4Xd5fyi2")
   
   resources :projects, path: "/", except: [:index] do
     resources :posts, path: "post", except: [:index] do
